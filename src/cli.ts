@@ -16,7 +16,7 @@ async function main() {
   }
   console.log(chalk.green(`  Detected framework: ${framework}\n`));
 
-  const routes = findRoutes();
+  const routes = findRoutes(framework);
 
   if (routes.length === 0) {
     console.log(chalk.yellow("  No routes found in the project.\n"));

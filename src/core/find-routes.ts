@@ -2,19 +2,19 @@ import { glob } from "glob";
 import fs from "fs";
 
 export interface Route {
-  method: string;
-  path: string;
+  method: string | undefined;
+  path: string | undefined;
 }
 
-export function findRoutes(): string[] {
-  const files = glob.sync("**/*.{ts,js}", {
+export function findRoutes(framework: string): Route[] {
+  const files = glob.sync("**/*.{js,ts}", {
     ignore: ["node_modules/**", "dist/**"],
   });
 
   const routes: Route[] = [];
 
   const routeRegex =
-    /(?:app|router)\.(get|post|put|delete|patch|options|head)\s*\(\s*['"`]([^'"`]+)['"`]/g;
+    /(app|router)\.(get|post|put|delete|patch)\s*\(\s*["'`](.*?)["'`]/g;
 
   for (const file of files) {
     const content = fs.readFileSync(file, "utf-8");
@@ -22,11 +22,11 @@ export function findRoutes(): string[] {
 
     while ((match = routeRegex.exec(content)) !== null) {
       routes.push({
-        method: match[2].toUpperCase(),
+        method: match[2],
         path: match[3],
       });
     }
   }
 
-  return routes.map((r) => `${r.method} ${r.path}`);
+  return routes;
 }
