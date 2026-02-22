@@ -4,6 +4,7 @@ import chalk from "chalk";
 import { detectFramework } from "./core/detect-framework";
 import { findRoutes } from "./core/find-routes";
 import { generateExpressTests } from "./generators/express-generator";
+import { generateNestTests } from "./generators/nest-generator";
 
 async function main() {
   console.log(chalk.blue("\n  Muna CLI V1 \n"));
@@ -30,6 +31,8 @@ async function main() {
 
   if (framework === "Express") {
     generateExpressTests(routes);
+  } else if (framework === "NestJS") {
+    generateNestTests(routes);
   }
 
   console.log(chalk.green("\n  Test generation complete!\n"));
